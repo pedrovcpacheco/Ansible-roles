@@ -1,0 +1,53 @@
+---
+- name: Start Lightdm
+  systemd: 
+    name=lightdm
+    state=started
+
+- name: Start Cups
+  systemd:
+    name=cups
+    state=started
+
+- name: Start Nscd
+  systemd:
+    name=nscd
+    state=started
+
+- name: Ubuntu Restart Dualmon
+  systemd: 
+    name=lightdm
+    state=restarted 
+
+- name: Ubuntu Restart Lightdm
+  systemd: 
+    name=lightdm
+    state=restarted 
+
+- name: Ubuntu Restart Nslcd
+  systemd:
+    name=nslcd
+    state=restarted
+
+
+- name: Ubuntu Restart Cups
+  systemd:
+    name=cups
+    state=restarted
+    enabled=yes
+
+- name: Command rc.local
+  shell: source /etc/rc.local
+  args:
+    executable: /bin/bash
+  ignore_errors: True
+
+- name: Permissao home
+  command: chown -R  {{ DEVS }}:root {{ diretorio }} 
+  ignore_errors: True
+
+- name: Ubuntu Auth-client-config
+  shell: auth-client-config -t nss -p lac_ldap
+  args:
+    executable: /bin/bash
+    

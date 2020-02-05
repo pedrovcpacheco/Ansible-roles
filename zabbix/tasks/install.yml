@@ -1,0 +1,78 @@
+---
+- name: Checar zabbix-client rodando
+  shell: pidof zabbix_agentd
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04" or  ansible_distribution == "RedHat" or ansible_distribution == "CentOS"
+  register: pidof
+  ignore_errors: True
+  tags: zabbix
+
+- name: Instalar serviço Zabbix Client
+  when: ansible_distribution_version == "16.04" and pidof is failed
+  apt:
+    name: zabbix-agent
+    state: present
+    update_cache: true
+  register: installed
+  tags: zabbix
+
+- name: Instalar Repositorio do serviço Zabbix Client
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"  and pidof is failed 
+  yum:
+    name: epel-release
+    state: present
+  tags: zabbix
+
+- name: Limpar repositorio - yum-clean-metadata
+  command: yum clean metadata
+  args:
+    warn: no
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS" and pidof is failed 
+  tags: zabbix
+
+- name: Instalar serviço Zabbix Client
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS" and  pidof is failed 
+  yum:
+    name: zabbix30-agent.x86_64
+    state: present
+    update_cache: yes
+  notify:
+    - Centos Zabbix Client
+  tags: zabbix
+
+- name: Instalar serviço Zabbix Client
+  when: ansible_distribution_version == "14.04" and pidof is failed 
+  apt:
+    name: zabbix-agent
+    state: present
+    update_cache: true
+  notify:
+    - Start Ubuntu 14.04 
+  tags: zabbix
+
+- name: Inicializar o serviço Zabbix Client
+  when: ansible_distribution_version == "16.04" and pidof is failed
+  systemd:
+    name: zabbix-agent
+    state: started
+    enabled: yes
+    masked: no
+    scope: system
+  tags: zabbix
+
+- name: Inicializar o serviço Zabbix Client
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS" and pidof is failed
+  systemd:
+    name: zabbix-agent
+    state: started
+    enabled: yes
+    masked: no
+    scope: system
+  tags: zabbix
+
+- name: Inicializar o serviço Zabbix Client
+  when: ansible_distribution_version == "14.04" and pidof is failed
+  service:
+    name: zabbix-agent
+    state: started
+    enabled: yes
+  tags: zabbix

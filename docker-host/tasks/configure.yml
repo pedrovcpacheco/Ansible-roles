@@ -1,0 +1,29 @@
+---
+ - name:  Configurar permissão do dockerd 
+   shell: usermod -aG docker ${USER} 
+
+ - name: Inicializar o serviço Docker
+   when: ansible_distribution_version == "18.04" or ansible_distribution_version == "16.04" and  ansible_distribution == "RedHat" or ansible_distribution == "CentOS"
+   systemd:
+     name: docker
+     state: started
+     enabled: yes
+     masked: no
+     scope: system
+   register: start_docker
+   
+
+ - name: If failed else
+   when: start_docker is failed
+   shell: systemctl restart docker
+  
+   
+ - name: Setar docker-registry 
+   copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+   notify:
+    - Restart docker

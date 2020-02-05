@@ -1,0 +1,10 @@
+---
+- name: Ubuntu Restart Dockerd
+  service: name=docker state=restarted 
+
+- name: Centos7 Reboot selinux
+  command: reboot
+
+
+
+

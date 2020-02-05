@@ -1,0 +1,37 @@
+---
+ - name: Definindo configuração do serviço Zabbix Client
+   #when: ansible_distribution_version == "16.04" 
+   template:
+     src: zabbix-agentd.j2
+     dest: /etc/zabbix/zabbix_agentd.conf
+     owner: root
+     group: root
+     mode: 0644
+   with_items: "{{ zabbix }}"
+   notify:
+     - Restart Zabbix Client
+   tags: zabbix
+   
+ #- name: Definindo configuração do serviço Zabbix Client
+ #  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+ #  template:
+ #    src: zabbix-agentd.j2
+ #    dest: /etc/zabbix/zabbix_agentd.conf
+ #    owner: root
+ #    group: root
+ #    mode: 0644
+ #  notify:
+ #    - Centos Restart Zabbix Client
+ #  tags: zabbix
+ 
+# - name: Definindo configuração do serviço Zabbix Client
+#   when: ansible_distribution_version == "14.04" 
+#   template:
+#     src: zabbix-agentd.j2
+#     dest: /etc/zabbix/zabbix_agentd.conf
+#     owner: root
+#     group: root
+#     mode: 0644
+#   notify:
+#     - Restart Ubuntu 14.04 
+#   tags: zabbix

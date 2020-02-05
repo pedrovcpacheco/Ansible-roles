@@ -1,0 +1,53 @@
+---
+- name: Configurar Dualmon
+  copy:
+    src: dualmon.sh
+    dest: /usr/bin/dualmon.sh
+    owner: root
+    group: root
+    mode: 0775
+  notify:
+     - Ubuntu Restart Dualmon
+  
+- name: Configurar Lightdm
+  copy:
+    src: lightdm.conf
+    dest: /etc/lightdm/lightdm.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Ubuntu Restart Lightdm
+
+- name: Configurar Nsswitch
+  copy: 
+    src: nsswitch.conf
+    dest: /etc/nsswitch.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configurar Ldap Secret e Nslcd
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/etc/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: 
+    - ldap.secret
+    - nslcd.conf
+    - ldap.conf
+  notify:
+    - Ubuntu Restart Nslcd
+    - Ubuntu Auth-client-config
+  
+- name: Configurar Cups
+  template: 
+    src: printers.j2
+    dest: /etc/cups/printers.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+     - Ubuntu Restart Cups

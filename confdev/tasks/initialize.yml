@@ -1,0 +1,28 @@
+---
+- name: Inicializar o serviço Lightdm
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04" 
+  systemd:
+    name: lightdm
+    state: started
+    enabled: yes
+    masked: no
+    scope: system
+  
+- name: Inicializar o serviço Cups
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04" 
+  systemd:
+    name: cups
+    state: started
+    enabled: yes
+    masked: no
+    scope: system
+  
+- name: Inicializar o serviço Nscd
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04" 
+  systemd:
+    name: nscd
+    state: started
+    enabled: yes
+    masked: no
+    scope: system
+  

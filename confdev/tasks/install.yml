@@ -1,0 +1,44 @@
+---
+- name: Instalação de pacotes para os Devs Ubuntu 16.04
+  when: ansible_distribution_version == "16.04" 
+  ignore_errors: True
+  apt:
+    name: "{{ pacotes_confdev_ubuntu_16 }}"
+    state: present
+    update_cache: true
+  register: installed
+  notify: 
+    - Ubuntu Restart Lightdm
+    - Ubuntu Restart Cups
+    - Ubuntu Restart Nslcd
+    - Ubuntu Auth-client-config
+
+- name: Instalação de pacotes para os Devs Ubuntu 14.04
+  when: ansible_distribution_version == "14.04"
+  apt:
+    name: "{{ pacotes_confdev_ubuntu_14 }}"
+    state: present
+    update_cache: true
+  register: installed
+  notify: 
+    - Ubuntu Restart Lightdm
+    - Ubuntu Restart Cups
+    - Ubuntu Restart Nslcd
+    - Ubuntu Auth-client-config
+  
+- name: Instalar driver da impressora Brother
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04" and ansible_architecture == "i386"
+  apt:
+    deb: "{{ user.driver }}"
+    autoclean: yes
+  loop: "{{ brother_drivers }}"
+  loop_control: 
+    loop_var: user
+  
+
+ 
+
+
+
+
+    

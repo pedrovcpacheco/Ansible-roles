@@ -1,0 +1,35 @@
+---
+- name: Atualizar repositorio e upgrade no sistema Ubuntu
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04" 
+  apt: 
+    update_cache: yes
+    upgrade: dist
+  tags: confbase
+
+- name: Instalação de pacote epel-release RedHat
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"  #and updated is succeeded
+  yum:
+    name: epel-release-7-11.noarch
+    state: present
+    update_cache: yes
+  tags: confbase
+
+- name: Atualizar repositorio e upgrade no sistema RedHat
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"
+  yum: 
+    name: '*'
+    state: latest
+    exclude: kernel*
+    disablerepo: epel
+    skip_broken: yes
+    lock_timeout: 30
+  #register: updated
+  tags: confbase
+
+#- name: Instalação de pacote epel-release RedHat
+#  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"  and updated is succeeded
+#  yum:
+#    name: epel-release-7-11.noarch
+#    state: present
+#    update_cache: yes
+#  tags: confbase

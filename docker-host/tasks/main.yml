@@ -1,0 +1,16 @@
+---
+- name: Install docker
+  import_tasks: install.yml
+  tags: docker-host
+
+- name: Install docker
+  import_tasks: configure.yml
+  tags: docker-host
+
+- name: Install gitlab-ruuner
+  import_tasks: gitlab-runner.yml
+  tags: docker-host
+
+#- name: Install driver netshare for NFS Mount
+#  import_tasks: nfs-mount.yml
+#  tags: docker-host

@@ -1,0 +1,19 @@
+---
+- name: Update repositorios
+  import_tasks: update.yml
+  tags: confdev
+
+- name: Install ConfDev Client
+  import_tasks: install.yml
+  tags: confdev
+
+- name: Configure ConfDev Client
+  import_tasks: configure_configs.yml
+  when: installed is succeeded
+  tags: confdev
+
+- name: Configure ConfDev Client
+  import_tasks: configure_packages.yml
+  tags: confdev
+
+

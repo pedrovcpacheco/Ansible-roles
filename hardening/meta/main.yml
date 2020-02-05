@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: Pedro Pacheco
+  description: Role para implementar segurança na SO
+  company: Campina Tec
+  license: GPLv3
+  min_ansible_version: 2.4
+  platforms:
+   - name: EL
+     versions:
+     - 7
+   - name: Ubuntu
+     versions:
+     - xernial
+     - trusty
+  galaxy_tags: 
+    - hardening
+
+dependencies:
+  - role: ntp
+  - role: confbase
+
+  
+  

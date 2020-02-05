@@ -1,0 +1,23 @@
+---
+
+- name:  Start Zabbix Client
+  service: name=zabbix-agent state=started
+
+- name: Centos Zabbix Client
+  service: name=zabbix-agent state=started 
+
+- name:  Start Ubuntu 14.04
+  service: name=zabbix-agent state=started
+
+- name: Restart Zabbix Client
+  service: name=zabbix-agent state=restarted 
+
+- name: Centos Restart Zabbix Client 
+  service: name=zabbix-agent state=restarted 
+
+- name: Restart Ubuntu 14.04
+  service: name=zabbix-agent state=restarted 
+
+
+
+

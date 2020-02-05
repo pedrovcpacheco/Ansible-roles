@@ -1,0 +1,36 @@
+---
+ - name: Criar Diretorio
+   ignore_errors: True
+   file:
+     path: "{{ diretorio }}"
+     owner: "{{ DEVS }}"
+     group: root
+     mode: 0775
+     recurse: yes
+     state: directory
+   notify: 
+      - Ubuntu Restart Nslcd
+      - Permissao home
+
+ - name: Mapear pastas compartilhadas
+   shell: 
+     cmd: |
+      mkdir  /home/{{ DEVS }}/{{item}}/   
+      cat > /etc/rc.local << EOF
+      sudo  mount -t cifs -o username={{ DEVS }},password=,vers=1.0  //{{ IP_SRV_SAMBA }}/informatica /home/{{ DEVS }}/informatica/ 
+      sudo  mount -t cifs -o username={{ DEVS }},password=,vers=1.0  //{{ IP_SRV_SAMBA }}/diretorio-publico /home/{{ DEVS }}/diretorio-publico/  
+       exit 0
+   args:
+    warn: False
+   loop: "{{ pastas }}"
+   notify: 
+      - Command rc.local
+      
+ - name: Permissao via sudo
+   shell: 
+      cmd: |
+       echo  " "{{ DEVS }}"    ALL=(ALL:ALL) NOPASSWD:ALL " >> /etc/sudoers.d/sudoers 
+        exit 0
+   args:
+    warn: False
+   

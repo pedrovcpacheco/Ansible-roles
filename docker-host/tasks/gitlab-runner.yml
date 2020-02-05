@@ -1,0 +1,27 @@
+---
+- name:  Download binario gitlab-runner x64
+  shell: curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
+  ignore_errors: True
+ 
+- name:  Permissão binario gitlab-runner
+  shell: chmod +x /usr/local/bin/gitlab-runner
+
+- name:  Permissão binario gitlab-runner
+  shell: useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash
+  ignore_errors: True
+
+- name:  Permissão  usermod
+  shell: usermod -aG docker gitlab-runner
+
+- name:  Permissão  past home 
+  shell: chown -R gitlab-runner:gitlab-runner /home/gitlab-runner/
+
+- name:  Instalando gitlab-runner como serviço
+  shell: gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+  ignore_errors: True
+  notify: 
+   - Start gitlab-runner
+
+
+
+ 

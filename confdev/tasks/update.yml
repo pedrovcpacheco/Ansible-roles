@@ -1,0 +1,23 @@
+---
+- name: Update repositorios
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04"
+  apt_key: 
+    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    state: present
+
+- name: Instalar repositorio Google Chrome
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04"
+  shell: echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+  args:
+    warn: false
+
+- name: Instalar repositorio para Atom
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04"
+  apt_repository:
+    repo: 'ppa:webupd8team/atom'
+    
+  
+
+
+
+

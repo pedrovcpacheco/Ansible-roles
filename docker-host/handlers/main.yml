@@ -1,0 +1,24 @@
+---
+- name: Restart docker
+  systemd:
+    name=docker
+    state=restarted 
+    enabled=yes
+
+#- name: Iniciar Docker
+#  systemd:
+#    name=docker
+#    state=started
+#    enabled=yes
+
+- name: Start gitlab-runner
+  systemd:
+    name=gitlab-runner
+    state=started
+    enabled=yes
+
+- name: Start docker-volume-netshare
+  systemd: 
+    name=docker-volume-netshare 
+    state=started
+    enabled=yes

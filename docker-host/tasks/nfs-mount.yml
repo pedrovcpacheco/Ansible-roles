@@ -1,0 +1,28 @@
+---
+- name: Instalação do pacote nfs-common
+  when: ansible_distribution_version == "18.04" or ansible_distribution_version == "16.04"
+  apt:
+    name:  nfs-common
+    state: present
+    update_cache: true
+
+- name: Download driver nfs - netshare
+  get_url:
+    url: https://github.com/ContainX/docker-volume-netshare/releases/download/{{ netshare_version }}/{{ package_netshare_version }}
+    dest: $PWD
+  
+- name: Instalando netshare
+  when: ansible_distribution_version == "18.04" or ansible_distribution_version == "16.04"
+  shell: dpkg -i {{ package_netshare_version }}
+  register: netshare 
+  notify: 
+    - Start docker-volume-netshare
+
+- name: Criar path
+  when: ansible_distribution_version == "18.04" or ansible_distribution_version == "16.04" and netshare is succeeded
+  shell: mkdir -p  {{ mount_point }}
+
+- name: Criar path
+  when: ansible_distribution_version == "18.04" or ansible_distribution_version == "16.04"
+  shell: echo "nfs-server.domain:{{ mount_path }} {{ mount_point }}    nfs4    defaults,proto=tcp    0 0" >> /etc/fstab
+

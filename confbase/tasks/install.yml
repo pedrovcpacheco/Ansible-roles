@@ -1,0 +1,19 @@
+---
+- name: Instalação de pacotes basicos Ubuntu
+  when: ansible_distribution_version == "16.04" or ansible_distribution_version == "14.04"
+  apt:
+    name: "{{ pacotes_ubuntu }}"
+    state: present
+    update_cache: true
+  tags: confbase
+
+- name: Instalação de pacotes basicos RedHat
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"
+  yum:
+    name: "{{ pacotes_RedHat }}"
+    state: present
+    update_cache: yes
+  tags: confbase
+
+
+

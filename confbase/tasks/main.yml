@@ -1,0 +1,14 @@
+---
+- name: Update pacotes
+  import_tasks: update.yml
+
+- name: Install Confbase Client
+  import_tasks: install.yml
+
+- name: Configure Confbase Client
+  import_tasks: configure.yml
+  
+  
+     
+
+

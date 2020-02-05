@@ -1,0 +1,6 @@
+---
+- name: Install Zabbix Client
+  import_tasks: install.yml
+
+- name: Configure Zabbix Client
+  import_tasks: configure.yml
